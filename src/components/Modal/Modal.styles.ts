@@ -2,54 +2,18 @@ import { styled, config } from '../../../stitches.config';
 
 import { DismissButton, pxToEm } from '../../utilities';
 
+// TODO: colors, spacing and other primitives will be moved to the sitches config as 'theme' styles
+
 export const StyledModal = styled('div', {
-  display: 'block',
+  alignItems: 'center',
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  // using a string as stitches makes this `px` vs unitless
+  inset: '0',
+  justifyItems: 'center',
   position: 'fixed',
-  zIndex: 3,
-});
-
-export const StyledModalOverlay = styled('div', {
-  backgroundColor: 'black',
-  height: '100%',
-  left: '0',
-  opacity: '0.5',
-  position: 'fixed',
-  top: '0',
-  width: '100%',
-
-  variants: {
-    isOpen: {
-      true: {
-        display: 'block',
-      },
-      false: {
-        display: 'none',
-      },
-    },
-  },
-});
-
-export const StyledModalDialog = styled('div', {
-  ...config.utils.spacingNormalizer(),
-  alignItems: 'baseline',
-  backgroundColor: 'white',
-  border: '1px solid black',
-  borderRadius: '5px',
-  gridTemplateColumns: '1fr auto',
-  gridTemplateRows: 'auto',
-  gridColumnGap: pxToEm(10),
-  lineHeight: '1.5',
-  maxWidth: pxToEm(500),
-  padding: pxToEm(16),
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  // I want to make this configurable... gotta look into that
   zIndex: 4,
-
-  '&:focus': {
-    outline: '1px solid black',
-  },
 
   variants: {
     isOpen: {
@@ -61,6 +25,32 @@ export const StyledModalDialog = styled('div', {
       },
     },
   },
+});
+
+export const StyledModalOverlay = styled('div', {
+  backgroundColor: '#000000',
+  inset: '0',
+  opacity: 0.5,
+  position: 'fixed',
+});
+
+export const StyledModalDialog = styled('div', {
+  ...config.utils.spacingNormalizer(),
+  backgroundColor: '#FFFFFF',
+  border: '1px solid #000000',
+  borderRadius: '5px',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+  gridTemplateRows: 'auto',
+  gridColumnGap: pxToEm(10),
+  lineHeight: 1.5,
+  maxWidth: pxToEm(500),
+  padding: pxToEm(16),
+  position: 'relative',
+
+  '&:focus': {
+    outline: '1px solid #000000',
+  },
 
   defaultVariants: {
     isOpen: 'false',
@@ -69,6 +59,7 @@ export const StyledModalDialog = styled('div', {
 
 export const StyledModalContent = styled('div', {
   ...config.utils.typographyNormalizer(),
+  // using grid-area vs grid-template-area as stitches doesnt like non-string/number values
   gridArea: '1 / 1 / 1 / 1',
 });
 

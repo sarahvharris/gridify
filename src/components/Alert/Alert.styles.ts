@@ -2,13 +2,15 @@ import { styled, config } from '../../../stitches.config';
 
 import { DismissButton, pxToEm } from '../../utilities';
 
+// TODO: colors, spacing and other primitives will be moved to the sitches config as 'theme' styles
+
 export const StyledAlert = styled('div', {
   ...config.utils.spacingNormalizer(),
   alignItems: 'baseline',
   display: 'grid',
   gridTemplateRows: 'auto',
   gridColumnGap: pxToEm(10),
-  lineHeight: '1.5',
+  lineHeight: 1.5,
   padding: pxToEm(16),
 
   variants: {
@@ -22,13 +24,13 @@ export const StyledAlert = styled('div', {
     },
     variant: {
       success: {
-        backgroundColor: '#ecf4ee',
+        backgroundColor: '#ECF4EE',
       },
       error: {
-        backgroundColor: '#fcf1ef',
+        backgroundColor: '#FCF1EF',
       },
       warning: {
-        backgroundColor: '#fdf1dd',
+        backgroundColor: '#FDF1DD',
       },
     },
   },
@@ -41,8 +43,9 @@ export const StyledAlert = styled('div', {
 
 export const StyledAlertIcon = styled('span', {
   display: 'inline',
+  // using grid-area vs grid-template-area as stitches doesnt like non-string/number values
   gridArea: '1 / 1 / 1 / 1',
-  backgroundColor: 'black',
+  backgroundColor: '#000000',
   width: pxToEm(16),
   height: pxToEm(16),
 });
