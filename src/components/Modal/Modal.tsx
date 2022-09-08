@@ -48,7 +48,7 @@ export interface ModalType {
 }
 
 /**
- * I am no designer so I am using [Radix UI](https://www.radix-ui.com/docs/primitives/components/dialog) as reference
+ * I am no designer so I am using [Radix UI's Dialog](https://www.radix-ui.com/docs/primitives/components/dialog) as reference
  */
 export const Modal: FC<ModalType> = ({
   children,
@@ -88,10 +88,9 @@ export const Modal: FC<ModalType> = ({
   }, [isOpen]);
 
   return (
-    <StyledModal ref={modalRef}>
-      <StyledModalOverlay isOpen={isOpen} />
+    <StyledModal isOpen={isOpen} ref={modalRef}>
+      <StyledModalOverlay />
       <StyledModalDialog
-        isOpen={isOpen}
         aria-modal="true"
         ref={modalDialogRef}
         role="dialog"
