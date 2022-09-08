@@ -1,5 +1,4 @@
 import React, { ElementType, FC, ReactNode, useRef } from 'react';
-import { VisuallyHidden } from '../../utilities';
 import {
   StyledAlert,
   StyledAlertContent,
@@ -65,9 +64,10 @@ export const Alert: FC<AlertType> = ({
         {children}
       </StyledAlertContent>
       {dismissible ? (
-        <StyledAlertDismissBtn onClick={dismissAlert}>
-          <VisuallyHidden>{dismissButtonVhText}</VisuallyHidden>x
-        </StyledAlertDismissBtn>
+        <StyledAlertDismissBtn
+          dismissButtonVhText={dismissButtonVhText}
+          onClick={dismissAlert}
+        />
       ) : null}
     </StyledAlert>
   );
