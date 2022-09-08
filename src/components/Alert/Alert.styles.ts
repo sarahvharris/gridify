@@ -1,6 +1,6 @@
 import { styled, config } from '../../../stitches.config';
 
-import { pxToEm } from '../../utilities';
+import { DismissButton, pxToEm } from '../../utilities';
 
 export const StyledAlert = styled('div', {
   ...config.utils.spacingNormalizer(),
@@ -52,11 +52,7 @@ export const StyledAlertContent = styled('div', {
   gridArea: '1 / 2 / 1 / 2',
 });
 
-export const StyledAlertDismissBtn = styled('button', {
-  ...config.utils.typographyNormalizer(),
-  fontSize: pxToEm(16),
-  height: pxToEm(44),
-  width: pxToEm(44),
+export const StyledAlertDismissBtn = styled(DismissButton, {
   gridArea: '1 / 3 / 1 / 3',
 });
 
