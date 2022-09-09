@@ -5,6 +5,6 @@
  * @param base the parent 'base' font-size
  * @returns a px number transformed into em
  */
-export const pxToEm = (px: number, base: number): string => {
-  return `${isNaN(px / base) ? 0 : px / base}em`;
+export const pxToRem = (px: number, base = 16): string => {
+  return `${isNaN(px / base) ? 0 : px / base}rem`;
 };

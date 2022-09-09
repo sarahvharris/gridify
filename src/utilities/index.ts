@@ -3,3 +3,4 @@ export { DismissButton } from './components/DismissButton';
 export { VisuallyHidden } from './components/VisuallyHidden';
 // function utilties
 export { pxToEm } from './functions/pxToEm';
+export { pxToRem } from './functions/pxToRem';

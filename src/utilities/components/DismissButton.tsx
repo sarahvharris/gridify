@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
+import { Close } from '@carbon/icons-react';
 import { styled, config } from '../../../stitches.config';
-import { pxToEm } from '../functions/pxToEm';
-import { VisuallyHidden } from '../';
+import { pxToRem } from '../functions/pxToRem';
+import { VisuallyHidden } from './VisuallyHidden';
 
-export interface DismissButtonType {
+export type DismissButtonType = {
   /**
    * visually hidden text for the dismiss button, use for screen readers
    */
@@ -12,13 +13,26 @@ export interface DismissButtonType {
    * visually hidden text for the dismiss button, use for screen readers
    */
   onClick: () => void;
-}
+};
 
 export const StyledDismissBtn = styled('button', {
   ...config.utils.typographyNormalizer(),
-  fontSize: pxToEm(16),
-  height: pxToEm(44),
-  width: pxToEm(44),
+  alignItems: 'center',
+  backgroundColor: 'transparent',
+  border: 0,
+  cursor: 'pointer',
+  display: 'flex',
+  justifyContent: 'center',
+  height: pxToRem(44),
+  width: pxToRem(44),
+
+  '&:hover': {
+    backgroundColor: '#F2F2F2',
+  },
+
+  '&:focus': {
+    outline: '2px solid #000000',
+  },
 });
 
 export const DismissButton: FC<DismissButtonType> = ({
@@ -28,7 +42,8 @@ export const DismissButton: FC<DismissButtonType> = ({
 }: DismissButtonType) => {
   return (
     <StyledDismissBtn onClick={onClick} {...props}>
-      <VisuallyHidden>{dismissButtonVhText}</VisuallyHidden>x
+      <VisuallyHidden>{dismissButtonVhText}</VisuallyHidden>
+      <Close size="24" color="#000000" />
     </StyledDismissBtn>
   );
 };

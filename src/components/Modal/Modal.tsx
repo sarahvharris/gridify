@@ -9,13 +9,14 @@ import React, {
 import {
   StyledModal,
   StyledModalContent,
+  StyledModalContentWrapper,
   StyledModalDialog,
   StyledModalDismissBtn,
   StyledModalOverlay,
   StyledModalTitle,
 } from './Modal.styles';
 
-export interface ModalType {
+export type ModalType = {
   children: ReactNode;
   /**
    * visually hidden text for the dismiss button, use for screen readers
@@ -45,11 +46,10 @@ export interface ModalType {
    * z-index of the modal so it exceeds the content behind it
    */
   zIndex?: number;
-}
+};
 
-/**
- * I am no designer so I am using [Radix UI's Dialog](https://www.radix-ui.com/docs/primitives/components/dialog) as reference
- */
+// TODO: trap focus, focus on trigger on close
+
 export const Modal: FC<ModalType> = ({
   children,
   dismissButtonVhText,
@@ -58,7 +58,7 @@ export const Modal: FC<ModalType> = ({
   onOpen,
   title,
   titleElementType,
-  zIndex, // TODO: gotta figure out how to dynamically set it
+  zIndex,
   ...props
 }: ModalType) => {
   const [initBodyOverflow, setInitBodyOverflow] = useState('');
@@ -88,7 +88,7 @@ export const Modal: FC<ModalType> = ({
   }, [isOpen]);
 
   return (
-    <StyledModal isOpen={isOpen} ref={modalRef}>
+    <StyledModal css={{ zIndex: zIndex }} isOpen={isOpen} ref={modalRef}>
       <StyledModalOverlay />
       <StyledModalDialog
         aria-modal="true"
@@ -97,10 +97,10 @@ export const Modal: FC<ModalType> = ({
         tabIndex={-1}
         {...props}
       >
-        <StyledModalContent>
+        <StyledModalContentWrapper>
           <StyledModalTitle as={titleElementType}>{title}</StyledModalTitle>
           <StyledModalContent>{children}</StyledModalContent>
-        </StyledModalContent>
+        </StyledModalContentWrapper>
         <StyledModalDismissBtn
           dismissButtonVhText={dismissButtonVhText}
           onClick={dismissModal}

@@ -1,6 +1,5 @@
 import { styled, config } from '../../../stitches.config';
-
-import { DismissButton, pxToEm } from '../../utilities';
+import { DismissButton, pxToRem } from '../../utilities';
 
 // TODO: colors, spacing and other primitives will be moved to the sitches config as 'theme' styles
 
@@ -12,8 +11,6 @@ export const StyledModal = styled('div', {
   inset: '0',
   justifyItems: 'center',
   position: 'fixed',
-  // I want to make this configurable... gotta look into that
-  zIndex: 4,
 
   variants: {
     isOpen: {
@@ -42,10 +39,10 @@ export const StyledModalDialog = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr auto',
   gridTemplateRows: 'auto',
-  gridColumnGap: pxToEm(10),
-  lineHeight: 1.5,
-  maxWidth: pxToEm(500),
-  padding: pxToEm(16),
+  gridColumnGap: pxToRem(10),
+  margin: `0 ${pxToRem(20)}`,
+  maxWidth: pxToRem(500),
+  padding: pxToRem(16),
   position: 'relative',
 
   '&:focus': {
@@ -57,10 +54,14 @@ export const StyledModalDialog = styled('div', {
   },
 });
 
-export const StyledModalContent = styled('div', {
-  ...config.utils.typographyNormalizer(),
+export const StyledModalContentWrapper = styled('div', {
   // using grid-area vs grid-template-area as stitches doesnt like non-string/number values
   gridArea: '1 / 1 / 1 / 1',
+});
+
+export const StyledModalContent = styled('div', {
+  ...config.utils.typographyNormalizer(),
+  fontSize: pxToRem(14),
 });
 
 export const StyledModalDismissBtn = styled(DismissButton, {
@@ -69,4 +70,7 @@ export const StyledModalDismissBtn = styled(DismissButton, {
 
 export const StyledModalTitle = styled('h2', {
   ...config.utils.spacingNormalizer(),
+  ...config.utils.typographyNormalizerHeading(),
+  fontSize: pxToRem(24),
+  fontWeight: '800',
 });
