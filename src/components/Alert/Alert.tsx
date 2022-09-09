@@ -1,13 +1,30 @@
-import React, { ElementType, FC, ReactNode, useRef } from 'react';
+import {
+  CheckmarkFilled,
+  ErrorFilled,
+  WarningAltFilled,
+} from '@carbon/icons-react';
+import React, {
+  CSSProperties,
+  ElementType,
+  FC,
+  ReactNode,
+  useRef,
+} from 'react';
 import {
   StyledAlert,
   StyledAlertContent,
+  StyledAlertContentWrapper,
   StyledAlertDismissBtn,
+  StyledAlertDismissBtnWrapper,
   StyledAlertIcon,
   StyledAlertTitle,
 } from './Alert.styles';
 
-export interface AlertType {
+// TYPES
+const variant = ['error', 'success', 'warning'] as const;
+export type VariantType = typeof variant[number];
+
+export type AlertType = {
   children: ReactNode;
   /**
    * visually hidden text for the dismiss button, use for screen readers
@@ -28,12 +45,10 @@ export interface AlertType {
   /**
    * Alert variant type
    */
-  variant?: 'success' | 'error' | 'warning' | undefined;
-}
+  variant?: VariantType;
+  style?: CSSProperties;
+};
 
-/**
- * I am no designer so I am using [Pajamas Design System's Alert](https://design.gitlab.com/components/alert) as reference
- */
 export const Alert: FC<AlertType> = ({
   children,
   dismissButtonVhText,
@@ -51,6 +66,35 @@ export const Alert: FC<AlertType> = ({
     }
   };
 
+  const renderAlertIcon = () => {
+    switch (variant) {
+      case 'error':
+        return (
+          <ErrorFilled
+            color="#c91c00"
+            style={{ display: 'inline', verticalAlign: 'text-top' }}
+            size="20"
+          />
+        );
+      case 'success':
+        return (
+          <CheckmarkFilled
+            color="#217645"
+            style={{ display: 'inline', verticalAlign: 'text-top' }}
+            size="20"
+          />
+        );
+      case 'warning':
+        return (
+          <WarningAltFilled
+            color="#9e5400"
+            style={{ display: 'inline', verticalAlign: 'text-top' }}
+            size="20"
+          />
+        );
+    }
+  };
+
   return (
     <StyledAlert
       dismissible={dismissible}
@@ -58,16 +102,18 @@ export const Alert: FC<AlertType> = ({
       variant={variant}
       {...props}
     >
-      <StyledAlertIcon></StyledAlertIcon>
-      <StyledAlertContent>
+      <StyledAlertIcon>{renderAlertIcon()}</StyledAlertIcon>
+      <StyledAlertContentWrapper>
         <StyledAlertTitle as={titleElementType}>{title}</StyledAlertTitle>
-        {children}
-      </StyledAlertContent>
+        <StyledAlertContent>{children}</StyledAlertContent>
+      </StyledAlertContentWrapper>
       {dismissible ? (
-        <StyledAlertDismissBtn
-          dismissButtonVhText={dismissButtonVhText}
-          onClick={dismissAlert}
-        />
+        <StyledAlertDismissBtnWrapper>
+          <StyledAlertDismissBtn
+            dismissButtonVhText={dismissButtonVhText}
+            onClick={dismissAlert}
+          />
+        </StyledAlertDismissBtnWrapper>
       ) : null}
     </StyledAlert>
   );
@@ -75,7 +121,7 @@ export const Alert: FC<AlertType> = ({
 
 Alert.defaultProps = {
   dismissButtonVhText: 'dismiss message',
-  dismissible: true,
+  dismissible: false,
   titleElementType: 'h2',
   variant: 'success',
 };
