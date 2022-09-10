@@ -1,3 +1,4 @@
+import FocusTrap from 'focus-trap-react';
 import React, {
   ElementType,
   FC,
@@ -81,32 +82,45 @@ export const Modal: FC<ModalType> = ({
   };
 
   useEffect(() => {
-    if (isOpen && modalDialogRef && modalDialogRef.current) {
+    if (isOpen) {
       onOpenHandler();
-      modalDialogRef.current.focus();
     }
   }, [isOpen]);
 
   return (
-    <StyledModal css={{ zIndex: zIndex }} isOpen={isOpen} ref={modalRef}>
-      <StyledModalOverlay />
-      <StyledModalDialog
-        aria-modal="true"
-        ref={modalDialogRef}
-        role="dialog"
-        tabIndex={-1}
-        {...props}
-      >
-        <StyledModalContentWrapper>
-          <StyledModalTitle as={titleElementType}>{title}</StyledModalTitle>
-          <StyledModalContent>{children}</StyledModalContent>
-        </StyledModalContentWrapper>
-        <StyledModalDismissBtn
-          dismissButtonVhText={dismissButtonVhText}
-          onClick={dismissModal}
-        />
-      </StyledModalDialog>
-    </StyledModal>
+    <>
+      {isOpen ? (
+        <StyledModal css={{ zIndex: zIndex }} isOpen={isOpen} ref={modalRef}>
+          <StyledModalOverlay />
+          <FocusTrap
+            focusTrapOptions={{
+              onActivate: () => {
+                modalDialogRef.current?.focus();
+              },
+            }}
+          >
+            <StyledModalDialog
+              aria-modal="true"
+              ref={modalDialogRef}
+              role="dialog"
+              tabIndex={-1}
+              {...props}
+            >
+              <StyledModalContentWrapper>
+                <StyledModalTitle as={titleElementType}>
+                  {title}
+                </StyledModalTitle>
+                <StyledModalContent>{children}</StyledModalContent>
+              </StyledModalContentWrapper>
+              <StyledModalDismissBtn
+                dismissButtonVhText={dismissButtonVhText}
+                onClick={dismissModal}
+              />
+            </StyledModalDialog>
+          </FocusTrap>
+        </StyledModal>
+      ) : null}
+    </>
   );
 };
 
