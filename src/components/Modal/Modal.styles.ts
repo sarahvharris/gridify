@@ -11,21 +11,11 @@ export const StyledModal = styled('div', {
   inset: '0',
   justifyItems: 'center',
   position: 'fixed',
-
-  variants: {
-    isOpen: {
-      true: {
-        display: 'grid',
-      },
-      false: {
-        display: 'none',
-      },
-    },
-  },
 });
 
 export const StyledModalOverlay = styled('div', {
   backgroundColor: '#000000',
+  cursor: 'pointer',
   inset: '0',
   opacity: 0.5,
   position: 'fixed',

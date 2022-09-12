@@ -1,12 +1,10 @@
+import React, { ElementType, FC, ReactNode, useEffect, useRef } from 'react';
+import { hideOthers, Undo } from 'aria-hidden';
 import FocusTrap from 'focus-trap-react';
-import React, {
-  ElementType,
-  FC,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RemoveScroll } from 'react-remove-scroll';
+
+import { Portal } from '../../utilities';
+
 import {
   StyledModal,
   StyledModalContent,
@@ -16,6 +14,76 @@ import {
   StyledModalOverlay,
   StyledModalTitle,
 } from './Modal.styles';
+
+export const Modal: FC<ModalType> = ({
+  children,
+  dismissButtonVhText,
+  isOpen,
+  onClose,
+  onOpen,
+  title,
+  titleElementType,
+  zIndex,
+  ...props
+}: ModalType) => {
+  const modalDialogRef = useRef<HTMLDivElement>(null);
+  let _undoAriaHidden: Undo;
+
+  const onCloseHandler = () => {
+    _undoAriaHidden();
+    onClose?.();
+  };
+
+  const onOpenHandler = () => {
+    // adding `setTimeout` as it reads better for NVDA
+    setTimeout(() => {
+      if (modalDialogRef) {
+        _undoAriaHidden = hideOthers(modalDialogRef.current as HTMLElement);
+        modalDialogRef.current?.focus();
+      }
+    });
+
+    onOpen?.();
+  };
+
+  useEffect(() => {
+    if (isOpen) onOpenHandler();
+  }, [isOpen]);
+
+  return (
+    <>
+      {isOpen && (
+        <Portal>
+          <RemoveScroll>
+            <FocusTrap>
+              <StyledModal css={{ zIndex: zIndex }}>
+                <StyledModalOverlay onClick={onCloseHandler} />
+                <StyledModalDialog
+                  aria-modal="true"
+                  ref={modalDialogRef}
+                  role="dialog"
+                  tabIndex={-1}
+                  {...props}
+                >
+                  <StyledModalContentWrapper>
+                    <StyledModalTitle as={titleElementType}>
+                      {title}
+                    </StyledModalTitle>
+                    <StyledModalContent>{children}</StyledModalContent>
+                  </StyledModalContentWrapper>
+                  <StyledModalDismissBtn
+                    dismissButtonVhText={dismissButtonVhText}
+                    onClick={onCloseHandler}
+                  />
+                </StyledModalDialog>
+              </StyledModal>
+            </FocusTrap>
+          </RemoveScroll>
+        </Portal>
+      )}
+    </>
+  );
+};
 
 export type ModalType = {
   children: ReactNode;
@@ -49,86 +117,11 @@ export type ModalType = {
   zIndex?: number;
 };
 
-// TODO: trap focus, focus on trigger on close
-
-export const Modal: FC<ModalType> = ({
-  children,
-  dismissButtonVhText,
-  isOpen,
-  onClose,
-  onOpen,
-  title,
-  titleElementType,
-  zIndex,
-  ...props
-}: ModalType) => {
-  const [initBodyOverflow, setInitBodyOverflow] = useState('');
-  const modalRef = useRef<HTMLDivElement>(null);
-  const modalDialogRef = useRef<HTMLDivElement>(null);
-
-  const onCloseHandler = () => {
-    document.body.style.overflow = initBodyOverflow;
-    onClose?.();
-  };
-
-  const onOpenHandler = () => {
-    setInitBodyOverflow(document.body.style.overflow);
-    document.body.style.overflow = 'hidden';
-    onOpen?.();
-  };
-
-  const dismissModal = () => {
-    onCloseHandler();
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      onOpenHandler();
-    }
-  }, [isOpen]);
-
-  return (
-    <>
-      {isOpen ? (
-        <StyledModal css={{ zIndex: zIndex }} isOpen={isOpen} ref={modalRef}>
-          <StyledModalOverlay />
-          <FocusTrap
-            focusTrapOptions={{
-              onActivate: () => {
-                modalDialogRef.current?.focus();
-              },
-            }}
-          >
-            <StyledModalDialog
-              aria-modal="true"
-              ref={modalDialogRef}
-              role="dialog"
-              tabIndex={-1}
-              {...props}
-            >
-              <StyledModalContentWrapper>
-                <StyledModalTitle as={titleElementType}>
-                  {title}
-                </StyledModalTitle>
-                <StyledModalContent>{children}</StyledModalContent>
-              </StyledModalContentWrapper>
-              <StyledModalDismissBtn
-                dismissButtonVhText={dismissButtonVhText}
-                onClick={dismissModal}
-              />
-            </StyledModalDialog>
-          </FocusTrap>
-        </StyledModal>
-      ) : null}
-    </>
-  );
-};
-
 Modal.defaultProps = {
   dismissButtonVhText: 'dismiss dialog',
   isOpen: false,
   titleElementType: 'h1',
-  zIndex: 3,
+  zIndex: 5,
 };
 
 export default Modal;

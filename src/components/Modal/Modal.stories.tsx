@@ -22,7 +22,6 @@ export const Configurable: Story<ModalType> = (args: ModalType) => {
         Open modal
       </button>
       <Modal
-        {...args}
         onClose={() => {
           setOpenModal(false);
         }}
